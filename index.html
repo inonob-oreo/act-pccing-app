@@ -1,11 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f2">
+  <title>よりみちノート｜体調の記録</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-    TEST
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="よりみちノート ホーム">
+      <span class="brand-mark" aria-hidden="true">より</span>
+      <span>よりみちノート<small>わたしのペースで、今日を記録</small></span>
+    </a>
+    <span class="privacy"><span aria-hidden="true">●</span> 記録はこの端末に保存されます</span>
+  </header>
+
+  <main class="page">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow">DAILY CHECK-IN</p>
+        <h1>今日のわたしを、<br class="mobile-break">そっと記録。</h1>
+        <p class="intro">できたことも、感じたことも。無理のない範囲で残してみましょう。</p>
+      </div>
+      <label class="date-picker">
+        <span>記録する日</span>
+        <input id="record-date" type="date" aria-label="記録する日">
+      </label>
+    </section>
+
+    <section class="summary" aria-label="今日の記録状況">
+      <div class="summary-item">
+        <span class="summary-icon activity-icon" aria-hidden="true">↗</span>
+        <div><span class="summary-label">活動</span><strong id="activity-summary">0 件</strong></div>
+      </div>
+      <div class="summary-item">
+        <span class="summary-icon vital-icon" aria-hidden="true">♡</span>
+        <div><span class="summary-label">バイタル</span><strong id="vital-summary">未記録</strong></div>
+      </div>
+      <div class="summary-item">
+        <span class="summary-icon medicine-icon" aria-hidden="true">✓</span>
+        <div><span class="summary-label">服薬</span><strong id="medication-summary">0 件</strong></div>
+      </div>
+    </section>
+
+    <div id="save-message" class="save-message" role="status" aria-live="polite"></div>
+
+    <div class="content-grid">
+      <div class="main-column">
+        <section class="card" aria-labelledby="activity-heading">
+          <div class="section-heading">
+            <div class="heading-icon activity-icon" aria-hidden="true">↗</div>
+            <div><h2 id="activity-heading">活動の記録</h2><p>小さな活動も、大切な記録です。</p></div>
+          </div>
+          <form id="activity-form" class="form-grid">
+            <label class="field field-wide">活動したこと
+              <input name="name" type="text" maxlength="60" placeholder="例：散歩、家事、休憩" required>
+            </label>
+            <label class="field">時間
+              <span class="input-with-unit"><input name="duration" type="number" min="1" max="1440" placeholder="30" required><span>分</span></span>
+            </label>
+            <label class="field">体感した負荷
+              <select name="effort" required>
+                <option value="">選択してください</option>
+                <option value="軽め">軽め</option>
+                <option value="ふつう">ふつう</option>
+                <option value="強め">強め</option>
+              </select>
+            </label>
+            <label class="field field-wide">活動後の体調（任意）
+              <input name="effect" type="text" maxlength="100" placeholder="例：少し疲れた、変化なし">
+            </label>
+            <button class="button button-primary field-wide" type="submit">＋ 活動を追加</button>
+          </form>
+          <div id="activity-list" class="entry-list" aria-live="polite"></div>
+        </section>
+
+        <section class="card" aria-labelledby="vitals-heading">
+          <div class="section-heading">
+            <div class="heading-icon vital-icon" aria-hidden="true">♡</div>
+            <div><h2 id="vitals-heading">バイタル・体調</h2><p>測定できた項目だけで大丈夫です。</p></div>
+          </div>
+          <form id="vitals-form" class="form-grid">
+            <label class="field">心拍数
+              <span class="input-with-unit"><input name="heartRate" type="number" min="20" max="250" placeholder="—"><span>bpm</span></span>
+            </label>
+            <label class="field">体温
+              <span class="input-with-unit"><input name="temperature" type="number" min="30" max="45" step="0.1" placeholder="—"><span>℃</span></span>
+            </label>
+            <label class="field">血圧（上）
+              <span class="input-with-unit"><input name="systolic" type="number" min="50" max="300" placeholder="—"><span>mmHg</span></span>
+            </label>
+            <label class="field">血圧（下）
+              <span class="input-with-unit"><input name="diastolic" type="number" min="20" max="200" placeholder="—"><span>mmHg</span></span>
+            </label>
+            <label class="field">痛み
+              <span class="input-with-unit"><input name="pain" type="number" min="0" max="10" placeholder="—"><span>/ 10</span></span>
+            </label>
+            <label class="field">疲労感
+              <span class="input-with-unit"><input name="fatigue" type="number" min="0" max="10" placeholder="—"><span>/ 10</span></span>
+            </label>
+            <label class="field field-wide">ひとことメモ（任意）
+              <input name="note" type="text" maxlength="200" placeholder="気づいたことや、休めたことなど">
+            </label>
+            <button class="button button-secondary field-wide" type="submit">バイタル・体調を保存</button>
+          </form>
+        </section>
+      </div>
+
+      <aside class="card medication-card" aria-labelledby="medication-heading">
+        <div class="section-heading">
+          <div class="heading-icon medicine-icon" aria-hidden="true">✓</div>
+          <div><h2 id="medication-heading">お薬の記録</h2><p>飲んだらチェックをつけましょう。</p></div>
+        </div>
+        <form id="medication-form" class="medication-form">
+          <label class="field">お薬の名前
+            <input name="name" type="text" maxlength="60" placeholder="例：朝のお薬" required>
+          </label>
+          <label class="field">予定時刻（任意）
+            <input name="time" type="time">
+          </label>
+          <button class="button button-secondary" type="submit">＋ お薬を追加</button>
+        </form>
+        <div id="medication-list" class="medication-list" aria-live="polite"></div>
+        <p class="medication-note">※ お薬の服用は、医師・薬剤師の指示に従ってください。</p>
+      </aside>
+    </div>
+
+    <footer>このアプリは記録用です。診断や治療の代わりにはなりません。</footer>
+  </main>
 </body>
 </html>
